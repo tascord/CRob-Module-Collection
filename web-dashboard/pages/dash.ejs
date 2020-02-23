@@ -1,0 +1,337 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="p/css/main.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+    <title><%=botName%> | Dash</title>
+</head>
+<body onload="loadServers()">
+    <div class="header">
+        <h1>Dash</h1>
+        <h3>this is an <a href="about">open source</a> bot</h3>
+        
+        <div class="navBar">
+            <ul>
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/logout">Logout</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <h1>Modifiable Servers</h1><br>
+    <div id="servers"></div>
+
+    <br><br><br><br>
+
+    <!-- <form action="#">
+
+        <span>
+            Server ID: <input type="text" name="server-id" class="serverID" value="577393598299897867" disabled
+        </span>
+
+        <div class="spacer"></div>
+
+        <h3>Welcome Settings</h3>
+
+        <sub>Welcome Icon</sub>
+        <input type="file" name="file" accept="image/*"><br>
+        <sub>Welcome Channel</sub>
+        <input type="text" class="input" placeholder="Current Selected Channel">
+
+        <div class="spacer"></div>
+
+        <h3>ModLog Settings</h3>
+
+        <sub>ModLog Channel</sub>
+        <input type="text" class="input" placeholder="Current Selected Channel">
+
+        <div class="spacer"></div>
+
+        <button type="submit">Save</button>
+
+    </form> -->
+
+</body>
+
+<script>
+
+var servers = [];
+
+function loadServers() {
+
+    servers = JSON.parse(`<%-serverData%>`);
+
+    for(var i in servers) {
+
+        var server = servers[i];
+        
+        var elem = document.createElement('div');
+        elem.classList.add('server')
+
+        var image = document.createElement('img');
+        image.src = server.icon;
+
+        var name = document.createElement('h3');
+        name.innerText = server.name;
+
+        var button = document.createElement('button');
+        var buttontext = document.createTextNode("Modfiy");
+
+        var settingsContainer = document.createElement('div');
+        settingsContainer.classList.add('content');
+
+        /**
+         * Settings:
+         * Role picker - Add, Remove or Modify
+         * Welcome & Modlog Channel
+         * Welcome image, welcome font by upload
+         * 
+         * For Future:
+         * Using Canvas, realtime editing of welcome image, including font size,
+         * Spacing and colouring per line.
+        **/
+
+        var spacer = document.createElement('div');
+        spacer.classList.add('spacer');
+
+        var settings = document.createElement('form');
+        settings.method = "POST";
+        settings.action = "/modify"
+        settings.enctype = "multipart/form-data";
+        settings.autocomplete = "off";
+
+        settingsContainer.appendChild(settings);
+
+        var token = document.createElement('input');
+        token.type = text;
+        token.name = 'code';
+        token.value = "<%=code%>";
+        // token.disabled = true;
+        token.style.visibility = 'hidden';
+
+        var serverid = document.createElement('input');
+        serverid.type = text;
+        serverid.name = 'server';
+        serverid.value = server.id;
+        // serverid.disabled = true;
+        serverid.style.visibility = 'hidden';
+    
+        settings.appendChild(token);
+        settings.appendChild(serverid)
+
+        //Welcome Settings
+        var _title = document.createElement('h2');
+        _title.innerText = "Welcome Settings";
+        
+        var _subTitle = document.createElement('sub');
+        _subTitle.innerText = "Welcome Icon"
+
+        var _welcome_image = document.createElement('input');
+        _welcome_image.name = "welcome_icon";
+        _welcome_image.type = "file";
+        _welcome_image.accept = "image/*";
+        _welcome_image.classList.add('input');
+
+        settings.appendChild(_title);
+        settings.appendChild(_subTitle);
+        settings.appendChild(_welcome_image);
+        
+        var _subTitle = document.createElement('sub');
+        _subTitle.innerText = "Welcome Channel"
+
+        var _welcome_channel = document.createElement('div');
+        _welcome_channel.classList.add('autocomplete');
+
+        var text = document.createElement('input');
+        text.name = "welcome_channel";
+        text.type = "text";
+        text.placeholder = server.welcome.channel ? server.channels.find(c => c.id === server.welcome.channel).name : 'Currently Unset';
+        text.classList.add('input');
+
+        _welcome_channel.appendChild(text);
+        autocomplete(text, server.channels.map(c => c.name));
+
+        settings.appendChild(_subTitle);
+        settings.appendChild(_welcome_channel);
+        settings.appendChild(spacer);
+
+        //ModLog Settings
+        var _title = document.createElement('h2');
+        _title.innerText = "ModLog Settings";
+        
+        var _subTitle = document.createElement('sub');
+        _subTitle.innerText = "ModLog Channel"
+
+        var _modlog_channel = document.createElement('div');
+        _modlog_channel.classList.add('autocomplete');
+
+        var text = document.createElement('input');
+        text.name = "modlog_channel";
+        text.placeholder = server.modlog.channel ? server.channels.find(c => c.id === server.modlog.channel).name : 'Currently Unset';
+        text.type = "text";
+        text.classList.add('input');
+
+        _modlog_channel.appendChild(text);
+        autocomplete(text, server.channels.map(c => c.name));
+
+        settings.appendChild(_subTitle);
+        settings.appendChild(_modlog_channel);
+        settings.appendChild(spacer);
+
+        var submit = document.createElement('input');
+        submit.type = 'submit';
+        submit.value = 'Save';
+        settings.appendChild(submit);
+
+        button.addEventListener('click', (event) => {
+            var parent = event.target.parentNode;
+
+            for(var i = 0; i < parent.children.length; i++) {
+                var child = parent.children[i];
+                
+                if(child.classList.contains("content")) {
+                    if(parent.children[i].style.display === "block") {
+                        child.style.display = "none";
+
+                        document.body.style.borderBottomLeftRadius = '10px';
+                        document.body.style.borderBottomRightRadius = '10px';
+                    } else {
+                        child.style.display = "block";
+
+                        document.body.style.borderBottomLeftRadius = '0px';
+                        document.body.style.borderBottomRightRadius = '0px';
+                    }
+                }
+            }
+        });
+
+        button.appendChild(buttontext);
+
+        elem.appendChild(image);
+        elem.appendChild(name);
+        elem.appendChild(button);
+        elem.appendChild(settingsContainer);
+
+        document.getElementById('servers').appendChild(elem);
+    }
+
+}
+
+//Thank you W3 Schools!
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/**
+    <div class="server">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQX0sH2YWtJz3UHjAhUN1otxhAekbtRK_7QKc3iZxVQI6KyFH78" alt="Server Name Here's Icon">
+        <h3>Server Name Here</h3>
+        <button class="button">Modify</button>
+    </div>
+**/
+
+</script>
+
+
+</html>

@@ -15,12 +15,12 @@ h1, h2, h3 {
 }
 
 .pc {
-  color: #ff006a;
+  color: #7289da;
 }
 
 a {
   text-decoration: none;
-  color: #ff006a;
+  color: #7289da;
 }
 
 .header {
@@ -59,11 +59,11 @@ a {
 }
 
 .header .navBar ul li :hover {
-  color: #ff006a;
+  color: #7289da;
 }
 
 .header .navBar ul li .active {
-  color: #ff006a;
+  color: #7289da;
 }
 
 p {
@@ -90,7 +90,7 @@ p {
   appearance: none;
   width: 15px;
   height: 15px;
-  background-color: #ff006a;
+  background-color: #7289da;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -147,7 +147,7 @@ p {
 .login button {
   margin-top: 35px;
   width: 20%;
-  color: #ff006a;
+  color: #7289da;
   text-indent: 0;
   cursor: pointer;
   -webkit-transition: 0.25s;
@@ -166,5 +166,10 @@ p {
 
 .para b {
   font-size: 25px;
+}
+
+.error {
+  margin-top: 2.5%;
+  color: #ff5b5b;
 }
 /*# sourceMappingURL=main-source.css.map */

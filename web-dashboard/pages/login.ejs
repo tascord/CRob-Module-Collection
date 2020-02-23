@@ -16,7 +16,7 @@
         <div class="navBar">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/<%=ldUrl%>" class="active"><%=ldLabel%></a></li>
+                <li><a href="/login" class="active">Dash</a></li>
                 <li><a href="/stats">Stats</a></li>
                 <li><a href="/about">About</a></li>
             </ul>
@@ -27,11 +27,11 @@
        
         <div>
             <h2>Login</h2>
-            <h3><a href="/register">Register</a></h3>
+            <h3>To recieve a code, run '<%=botPrefix%>web'</h3>
+            <h3 class="error"><%=error%></h3>
         </div>
         
-        <input type="text" placeholder="Username" required>
-        <input type="password" placeholder="Password" required>
+        <input type="text" placeholder="Code" name="code" required pattern="[A-z0-9]{8}" maxlength="8">
         <button type="submit">Login</button>
     </form>
 

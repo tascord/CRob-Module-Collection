@@ -6,13 +6,13 @@ const pti = require('png-to-ico');
 /* Unpopulated Objects */
 var config = {};
 var client = {};
-var stats, ce;
+var stats, se;
 
 module.exports = {
-    load: function(moduleConfig, botConfig, botClient, constantExtentions) {
+    load: function(moduleConfig, botConfig, botClient, extentions) {
         config = botConfig;
         client = botClient;
-        ce = constantExtentions;
+        se = extentions.serverExtentions;
         runServer();
     }
 }
@@ -52,7 +52,7 @@ function startStats() {
     setInterval(() => {
         stats = JSON.parse(fs.readFileSync(`${__dirname}/stats.json`));
         
-        stats._times.push(moment().format("MMM Do h:mm ao"));
+        stats._times.push(moment().format("MMM Do h:mm a"));
         stats.ping.push(Math.trunc(client.ping * 10) / 10);
         stats.guilds.push(client.guilds.size);
 
@@ -63,5 +63,5 @@ function startStats() {
 
 function startServer() {
     //Start The Server
-    require('./server')(config);
+    require('./server')(config, se);
 }

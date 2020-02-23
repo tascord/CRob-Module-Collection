@@ -1,5 +1,15 @@
-{
-    "name": "web-dashboard",
-    "type": "constant",
-    "target": "webHandler.js"
-}
+[
+    {
+        "name": "web-dashboard",
+        "type": "constant",
+        "target": "webHandler.js"
+    },
+    {
+        "name": "web",
+        "type": "command",
+        "target": "command.js",
+        "command": "web",
+        "usage": "web",
+        "address": "https://tascord.ai"
+    }
+]
