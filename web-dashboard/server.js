@@ -5,10 +5,6 @@ const favicon = require('serve-favicon')
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
 
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-app.use(cookieParser());
-
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
@@ -19,24 +15,15 @@ app.set("view-engine", "ejs");
 
 module.exports = (config, sm, ce) => {
 
-    //This is probably a terrible idea, but ill fix it later
-    app.use(session({
-        secret: config.token,
-        saveUninitialized: true,
-        resave: true
-    }))
-    
     var port = process.env.PORT || config.port || 8080;
     
     app.use(favicon(__dirname + '/media/favicon.ico'));
 
     app.get('*', (req, res) => {
         
-        if(req.session) {}
-
         if(req.path.indexOf('/p/') > -1) {
-            if(!fs.existsSync(`${__dirname}/media/${req.path.split('/')[2]}`)) return res.render(page("404"),  {botName: config.name});
-            return res.sendFile(media('/css/main-source.css'));
+            if(!fs.existsSync(media(req.path.split('/').slice(2).join('/')))) return res.send('File not found');
+            else return res.sendFile(media(req.path.split('/').slice(2).join('/')));
         }
 
         switch(req.path) {
@@ -121,15 +108,20 @@ module.exports = (config, sm, ce) => {
                     var welcome = server.channels.find(c => c.name == fields.welcome_channel);
                     var modlog = server.channels.find(c => c.name == fields.modlog_channel);
 
-                    server.welcome.channel = welcome ? welcome.id : server.welcome.channel;
-                    server.modlog = modlog ? modlog.id : server.modlog;
+                    server.welcome.channel = (welcome ? welcome.id : server.welcome.channel);
+                    server.modLog = (modlog ? modlog.id : server.modLog);
 
-                    if(files.welcome_icon.size <= 0 || files.welcome_icon[0].headers['content-type'].split('/')[0] != 'image') return res.redirect('/login?e=Invalid image file provided');
-                    fs.copyFileSync(files.welcome_icon[0].path, `${__dirname}/media/images/${server.id}.${files.welcome_icon[0].headers['content-type'].split('/')[1]}`);
+                    if(files.welcome_icon.size > 10) {
+                        if(files.welcome_icon[0].headers['content-type'].split('/')[0] != 'image') return res.redirect('/login?e=Invalid image file provided');
+                        fs.copyFileSync(files.welcome_icon[0].path, `${__dirname}/media/images/${server.id}.${files.welcome_icon[0].headers['content-type'].split('/')[1]}`);
 
-                    server.welcome.image = `${JSON.parse(fs.readFileSync(`${__dirname}/web-dashboard.json`))[1].address}/p/images/${server.id}.${files.welcome_icon[0].headers['content-type'].split('/')[1]}`;
+                        server.welcome.image = `${JSON.parse(fs.readFileSync(`${__dirname}/web-dashboard.json`))[1].address}/p/images/${server.id}.${files.welcome_icon[0].headers['content-type'].split('/')[1]}`;
+                    }
 
+                    // var _server = sm.getServerData(server.id);
                     sm.modifyServer(server.id, server);
+
+                    // sm.sendModMessage(ce.getClient(), server.id, `Web Dashbord Changed Some Settings\n\n\n**Welcome Channel**\n${_server.channels.find(c => c.id == _server.welcome.channel).name} ~> ${server.channels.find(c => c.id == server.welcome.channel).name}\n\n**Welcome Image**\n${server.welcome.image} ~> ${server.welcome.image}`)
 
                     res.redirect(`/login?code=${auth}`);
 
@@ -206,7 +198,7 @@ module.exports = (config, sm, ce) => {
                 "icon": server.icon,
                 "roles": server.roles,
                 "channels": server.channels,
-                "modlog": {channel: server.modlog ? server.modlog : false},
+                "modLog": {channel: server.modLog ? server.modLog : false},
                 "welcome": {channel: server.welcome.channel ? server.welcome.channel : false, banner: server.welcome.image ? server.welcome.image : false}
             })
 

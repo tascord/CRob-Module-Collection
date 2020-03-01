@@ -15,12 +15,12 @@ h1, h2, h3 {
 }
 
 .pc {
-  color: #7289da;
+  color: #006aff;
 }
 
 a {
   text-decoration: none;
-  color: #7289da;
+  color: #006aff;
 }
 
 .header {
@@ -59,11 +59,11 @@ a {
 }
 
 .header .navBar ul li :hover {
-  color: #7289da;
+  color: #006aff;
 }
 
 .header .navBar ul li .active {
-  color: #7289da;
+  color: #006aff;
 }
 
 p {
@@ -90,7 +90,7 @@ p {
   appearance: none;
   width: 15px;
   height: 15px;
-  background-color: #7289da;
+  background-color: #006aff;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -147,7 +147,7 @@ p {
 .login button {
   margin-top: 35px;
   width: 20%;
-  color: #7289da;
+  color: #006aff;
   text-indent: 0;
   cursor: pointer;
   -webkit-transition: 0.25s;
@@ -171,5 +171,186 @@ p {
 .error {
   margin-top: 2.5%;
   color: #ff5b5b;
+}
+
+#servers {
+  width: 100%;
+  height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#servers .server {
+  display: block;
+  margin-bottom: 1.5%;
+  width: 70%;
+  height: 7.5%;
+  background-color: #006aff50;
+  border-radius: 10px;
+}
+
+#servers .server h3 {
+  margin-left: 10%;
+  margin-top: -3%;
+}
+
+#servers .server img {
+  height: 75%;
+  width: 4.5%;
+  margin-left: 2.5%;
+  border-radius: 100px;
+  margin-top: 0.75%;
+}
+
+#servers .server button {
+  margin-top: -3.75%;
+  margin-left: 75%;
+}
+
+#servers .server .content {
+  display: none;
+  margin-bottom: 30%;
+  overflow: hidden;
+  background-color: #23272A;
+}
+
+button {
+  outline: none;
+  border: none;
+  border-radius: 25px;
+  font-size: 25px;
+  font-family: 'Source Code Pro', monospace;
+  text-indent: 10px;
+  color: white;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  width: 25%;
+  background-color: #23272A;
+  margin-top: 35px;
+  width: 20%;
+  color: #006aff;
+  text-indent: 0;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:active {
+  background-color: #2C2F33;
+}
+
+form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-left: 2.5%;
+}
+
+form * {
+  font-family: 'Varela Round', sans-serif;
+}
+
+form sub {
+  color: white;
+  font-size: medium;
+}
+
+form h3 {
+  margin-left: 0%;
+  margin-top: 1.5%;
+  margin-bottom: 1.5%;
+}
+
+form input {
+  margin-bottom: 1%;
+  width: 30%;
+}
+
+form input[type="file"] {
+  width: 30%;
+}
+
+form .input {
+  outline: none;
+  border: none;
+  border-radius: 25px;
+  font-size: 20px;
+  font-family: 'Source Code Pro', monospace;
+  text-indent: 10px;
+  color: white;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  width: 20%;
+  background-color: #23272A;
+  margin-left: -0.5%;
+}
+
+form .spacer {
+  height: 1%;
+  width: 25%;
+  padding-top: 1%;
+  margin-bottom: 1%;
+}
+
+form .serverID {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+}
+
+form span {
+  margin-top: 2%;
+  font-size: medium;
+  color: white;
+}
+
+form input[type="submit"] {
+  font-size: large;
+  color: #006aff;
+  background: none;
+  border: none;
+  width: auto;
+}
+
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid white;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #2C2F33;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+}
+
+.autocomplete-items:hover, .autocomplete-items:active {
+  background-color: #23272A;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
 }
 /*# sourceMappingURL=main-source.css.map */

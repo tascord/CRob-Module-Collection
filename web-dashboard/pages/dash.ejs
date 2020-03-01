@@ -31,34 +31,6 @@
 
     <br><br><br><br>
 
-    <!-- <form action="#">
-
-        <span>
-            Server ID: <input type="text" name="server-id" class="serverID" value="577393598299897867" disabled
-        </span>
-
-        <div class="spacer"></div>
-
-        <h3>Welcome Settings</h3>
-
-        <sub>Welcome Icon</sub>
-        <input type="file" name="file" accept="image/*"><br>
-        <sub>Welcome Channel</sub>
-        <input type="text" class="input" placeholder="Current Selected Channel">
-
-        <div class="spacer"></div>
-
-        <h3>ModLog Settings</h3>
-
-        <sub>ModLog Channel</sub>
-        <input type="text" class="input" placeholder="Current Selected Channel">
-
-        <div class="spacer"></div>
-
-        <button type="submit">Save</button>
-
-    </form> -->
-
 </body>
 
 <script>
@@ -175,7 +147,7 @@ function loadServers() {
 
         var text = document.createElement('input');
         text.name = "modlog_channel";
-        text.placeholder = server.modlog.channel ? server.channels.find(c => c.id === server.modlog.channel).name : 'Currently Unset';
+        text.placeholder = server.modLog.channel ? server.channels.find(c => c.id === server.modLog.channel).name : 'Currently Unset';
         text.type = "text";
         text.classList.add('input');
 
@@ -200,11 +172,15 @@ function loadServers() {
                 if(child.classList.contains("content")) {
                     if(parent.children[i].style.display === "block") {
                         child.style.display = "none";
+                        
+                        parent.style.marginBottom = '1.5%';
 
                         document.body.style.borderBottomLeftRadius = '10px';
                         document.body.style.borderBottomRightRadius = '10px';
                     } else {
                         child.style.display = "block";
+                        
+                        parent.style.marginBottom = '25%';
 
                         document.body.style.borderBottomLeftRadius = '0px';
                         document.body.style.borderBottomRightRadius = '0px';

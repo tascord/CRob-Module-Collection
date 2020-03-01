@@ -13,6 +13,8 @@ module.exports = {
         config = botConfig;
         client = botClient;
         se = extentions.serverExtentions;
+        ce = extentions.clientExtentions;
+        console.log(extentions)
         runServer();
     }
 }
@@ -42,6 +44,8 @@ function createCss() {
             newCSS = newCSS.replace("#7289da", colour);
         }
     }
+
+    fs.writeFileSync(`${__dirname}/media/css/main.css`, newCSS);
 }
 
 function startStats() {
@@ -63,5 +67,5 @@ function startStats() {
 
 function startServer() {
     //Start The Server
-    require('./server')(config, se);
+    require('./server')(config, se, ce);
 }

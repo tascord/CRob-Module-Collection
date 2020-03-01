@@ -1,10 +1,4 @@
-var db = [{
-    id: '205811939861856257',
-    tag: 'tascord#9835',
-    token: '11111111',
-    held: false,
-    heldInterval: false
-  }];
+var db = [];
 var loggedIn = [];
 
 module.exports = {
